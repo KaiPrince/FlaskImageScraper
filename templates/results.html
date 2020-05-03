@@ -6,13 +6,15 @@
 * Description: This file contains the results page.
 -->
 
-{% extends "base.html" %} {% block title %}Results{% endblock %} 
-{% block content %}
+{% extends "base.html" %} {% block title %}Results{% endblock %} {% block
+content %}
 <p>{{source}}</p>
 <div class="row">
   {% for image in images %}
   <div class="col-3">
-    <img src="{{image}}" class="img-fluid img-thumbnail rounded" />
+    <a href="{{image}}">
+      <img src="{{image}}" class="img-fluid img-thumbnail rounded"
+    /></a>
   </div>
   {% endfor %}
 </div>
