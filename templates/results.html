@@ -1,0 +1,19 @@
+<!--
+* Project Name: FlaskImageScraper
+* File Name: results.html
+* Programmer: Kai Prince
+* Date: Sat, May 02, 2020
+* Description: This file contains the results page.
+-->
+
+<html>
+  <head>
+    <title>Flask Image Scraper</title>
+  </head>
+  <body>
+    <p>{{source}}</p>
+    {% for image in images %}
+    <img src="{{image}}" />
+    {% endfor %}
+  </body>
+</html>
