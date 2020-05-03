@@ -16,6 +16,20 @@ content %}
       <img src="{{image}}" class="img-fluid img-thumbnail rounded"
     /></a>
   </div>
+  {% endfor %} {% for video in videos %}
+  <div class="col-4">
+    <a href="{{video}}">
+      <video
+        src="{{video}}"
+        class="img-fluid img-thumbnail rounded"
+        autoplay
+        muted
+        controls
+        playsinline
+        loop
+      ></video>
+    </a>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}

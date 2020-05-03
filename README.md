@@ -5,4 +5,5 @@ flask run
 
 Todo:
 
-- Scrape and present videos
+- Group media by page, show header
+- Paginate output

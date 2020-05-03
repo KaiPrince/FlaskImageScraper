@@ -15,6 +15,40 @@ import mimetypes
 import re
 
 
+def get_videos(url):
+    """ Returns full links to all videos on a page. """
+    video_links = set()
+
+    page = get_page(url)
+    if not page:
+        return video_links
+    html = BeautifulSoup(page, "html.parser")
+
+    image_tags = html.find_all(["video", "source"])
+    for tag in image_tags:
+        if "src" not in tag.attrs:
+            continue
+        link = urljoin(url, tag["src"])
+        if is_url_video(link):
+            video_links.add(link)
+
+    link_tags = html.find_all("a")
+    for tag in link_tags:
+        if "href" not in tag.attrs:
+            continue
+
+        href = tag["href"]
+        if is_url_video(href):
+            video_links.add(urljoin(url, href))
+
+    return video_links
+
+
+def is_url_video(url):
+    mimetype, _encoding = mimetypes.guess_type(url)
+    return mimetype and mimetype.startswith("video")
+
+
 def get_links(url):
     """ Returns a list of all the links on a page. """
     links = set()
