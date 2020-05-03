@@ -15,7 +15,7 @@ import mimetypes
 import re
 
 
-def get_videos(url):
+def get_videos(url) -> list:
     """ Returns full links to all videos on a page. """
     video_links = []
 
@@ -49,7 +49,7 @@ def is_url_video(url):
     return mimetype and mimetype.startswith("video")
 
 
-def get_links(url):
+def get_links(url) -> set:
     """ Returns a list of all the links on a page. """
     links = set()
 
@@ -70,7 +70,7 @@ def get_links(url):
     return links
 
 
-def get_images(url) -> set:
+def get_images(url) -> list:
     """ Returns full links to all images on a page. """
     image_links = []
 
