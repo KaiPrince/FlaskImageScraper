@@ -81,10 +81,9 @@ super() }}
     });
 
     socket.on("page", function ({ data }) {
-      $("#content")
-        .children()
-        .append(...htmlToElements(data));
+      $("#loading-spinner").remove();
 
+      document.getElementById("pages").append(...htmlToElements(data));
       initLazyLoading();
     });
   });
@@ -98,37 +97,11 @@ super() }}
   </div>
 </div>
 
-{% for page, complete in collected_media %} {% if not loop.first %}
-<h2 class="lead mt-4">
-  <a href="/scrape/{{page.page_url}}" class="text-reset">{{page.page_title}}</a>
-</h2>
-<hr class="mt-0" />
-{% endif %}
-<div class="row">
-  {% for image in page.images %}
-  <div class="col-3">
-    <a href="{{image}}">
-      <img data-src="{{image}}" class="img-thumbnail lazy"
-    /></a>
+<div id="pages">
+  <div id="loading-spinner" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
-  {% endfor %} {% for video in page.videos %}
-  <div class="col-4">
-    <a href="{{video}}">
-      <video
-        data-src="{{video}}"
-        class="img-thumbnail lazy"
-        autoplay
-        muted
-        controls
-        playsinline
-        loop
-      ></video>
-    </a>
-  </div>
-  {% endfor %}
 </div>
-{% if not complete %}
-<small class="text-muted">
-  <a href="/scrape/{{page.page_url}}" class="text-reset">Show more...</a>
-</small>
-{% endif %} {% endfor %} {% endblock %}
+{% endblock %}

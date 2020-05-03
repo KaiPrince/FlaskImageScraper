@@ -47,16 +47,15 @@ def collect_page_media(html, src) -> dict:
 
 def recursive_scrape(
     url: str, scrape_func: callable, recursion_depth: int = 0
-) -> [(dict, bool)]:
+) -> (dict, bool):
     """ Recursive functions that consumes a URL string, 
         and produces a list of image URLs. 
     """
     print("Scraping " + url + "...")
-    scrape_results = []
 
     page = get_page(url)
     if not page:
-        return scrape_results
+        yield
     html = BeautifulSoup(page, "html.parser")
 
     results_from_page = scrape_func(html, url)
@@ -70,7 +69,7 @@ def recursive_scrape(
     more_recursion = hit_recursion_limit and links
     more_spread = len(links) > constants.recursion_spread_limit and recursion_depth
     complete = not more_recursion and not more_spread
-    scrape_results.append((results_from_page, complete))
+    yield (results_from_page, complete)
 
     if not hit_recursion_limit:
 
@@ -81,12 +80,7 @@ def recursive_scrape(
         )
         links_to_scrape = islice(links, spread_limit)
         for link in links_to_scrape:
-            descendant_results = recursive_scrape(
-                link, scrape_func, recursion_depth + 1
-            )
-            scrape_results.extend(descendant_results)
-
-    return scrape_results
+            yield from recursive_scrape(link, scrape_func, recursion_depth + 1)
 
 
 def get_downstream_links(html, url: str) -> set:

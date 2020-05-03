@@ -10,8 +10,7 @@ import gunicorn
 from flask import Flask
 from image_scraper import views
 from flask_socketio import SocketIO, emit
-from image_scraper.app_service import recursive_scrape
-from image_scraper.sockets import collect_and_emit
+from image_scraper.sockets import scrape_and_emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -30,7 +29,7 @@ def socket_connected():
 @socketio.on("start_scrape")
 def start_scrape(url):
     if url:
-        recursive_scrape(url, collect_and_emit)
+        scrape_and_emit(url)
 
 
 if __name__ == "__main__":
