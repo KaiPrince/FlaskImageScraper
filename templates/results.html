@@ -81,10 +81,16 @@ super() }}
     });
 
     socket.on("page", function ({ data }) {
-      $("#loading-spinner").remove();
-
       document.getElementById("pages").append(...htmlToElements(data));
       initLazyLoading();
+    });
+
+    socket.on("scrape-complete", function () {
+      $("#loading-spinner").remove();
+    });
+
+    socket.on("disconnet", function () {
+      $("#loading-spinner").remove();
     });
   });
 </script>

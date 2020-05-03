@@ -6,7 +6,6 @@ flask run
 Todo:
 
 - Restore "show more"
-- Paginate output
-  - Create iterable using yield, then limit iterations
+- Scrape only on button action.
 - Standardize url vs src
 - Fix results being different each time
