@@ -19,3 +19,5 @@ def scrape_and_emit(src):
             "components/media_page.html", page=page, complete=complete
         )
         emit("page", {"data": response})
+
+    emit("scrape-complete")

@@ -64,8 +64,8 @@ super() }}
       window.addEventListener("orientationChange", lazyload);
     }
   }
-  document.addEventListener("DOMContentLoaded", initLazyLoading);
-
+</script>
+<script>
   function htmlToElements(html) {
     var template = document.createElement("template");
     template.innerHTML = html;
@@ -74,6 +74,8 @@ super() }}
 
   // Script to connect to web socket
   $(document).ready(function () {
+    initLazyLoading();
+
     let socket = io.connect();
 
     socket.on("connect", function () {
