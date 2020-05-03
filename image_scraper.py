@@ -7,13 +7,12 @@
 *  them in a paginated display.
 """
 
-from flask import Flask, render_template, request, redirect, url_for
+from app import app
+from flask import render_template, request, redirect, url_for
 from constants import recursion_depth_limit, recursion_spread_limit
 from service import get_images, get_links, clean_url, get_videos
 from itertools import islice
 from app_service import recursive_scrape, collect_page_media
-
-app = Flask(__name__)
 
 
 @app.route("/", methods=["GET", "POST"])
