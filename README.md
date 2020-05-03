@@ -5,5 +5,4 @@ flask run
 
 Todo:
 
-- Group media by page, show header
 - Paginate output
