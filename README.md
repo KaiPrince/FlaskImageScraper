@@ -5,8 +5,7 @@ flask run
 
 Todo:
 
-- Fetch in background
-  - Send result in real-time over web socket as they're fetched
+- Restore "show more"
 - Paginate output
   - Create iterable using yield, then limit iterations
 - Standardize url vs src

@@ -81,7 +81,10 @@ super() }}
     });
 
     socket.on("page", function ({ data }) {
-      document.body.append(...htmlToElements(data));
+      $("#content")
+        .children()
+        .append(...htmlToElements(data));
+
       initLazyLoading();
     });
   });
