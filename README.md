@@ -6,5 +6,3 @@ flask run
 Todo:
 
 - Scrape and present videos
-- Bootstrap layout & styling
-- Minimum size threshold for images

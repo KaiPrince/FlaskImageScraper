@@ -7,4 +7,4 @@
 """
 
 recursion_depth_limit = 2
-recursion_spread_limit = 5
+recursion_spread_limit = 10
