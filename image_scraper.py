@@ -46,6 +46,8 @@ def recursive_scrape(url, recursion_depth=0):
         return images
 
     links = get_links(url)
+    diff = {link for link in links if link in url}
+    links.difference_update(diff)
     for link in islice(links, recursion_spread_limit):
         descendant_images = recursive_scrape(link, recursion_depth + 1)
         images.update(descendant_images)
