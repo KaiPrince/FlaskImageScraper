@@ -27,10 +27,7 @@ from utils.scraper import (
 from . import constants
 
 
-def collect_page_media(html, src):
-
-    if not html:
-        return None
+def collect_page_media(html, src) -> dict:
 
     images = scrape_images(html)
     images = list(map(lambda image: urljoin(src, image), images))
@@ -38,22 +35,19 @@ def collect_page_media(html, src):
     videos = scrape_videos(html)
     videos = list(map(lambda video: urljoin(src, video), videos))
 
-    if images or videos:
-        page_url = src
-        page_title = urlparse(src).path
-        return {
-            "page_url": page_url,
-            "page_title": page_title,
-            "images": images,
-            "videos": videos,
-        }
-    else:
-        return None
+    page_url = src
+    page_title = urlparse(src).path
+    return {
+        "page_url": page_url,
+        "page_title": page_title,
+        "images": images,
+        "videos": videos,
+    }
 
 
 def recursive_scrape(
     url: str, scrape_func: callable, recursion_depth: int = 0
-) -> (list, bool):
+) -> [(dict, bool)]:
     """ Recursive functions that consumes a URL string, 
         and produces a list of image URLs. 
     """
@@ -71,9 +65,11 @@ def recursive_scrape(
 
     hit_recursion_limit = recursion_depth >= constants.recursion_depth_limit
 
-    done_recursion = hit_recursion_limit and not links
-    done_spread = len(links) <= constants.recursion_spread_limit or not recursion_depth
-    complete = (not hit_recursion_limit or done_recursion) and done_spread
+    # An incomplete result will have a "show more" link
+    # An exception is made for the first page (depth=0)
+    more_recursion = hit_recursion_limit and links
+    more_spread = len(links) > constants.recursion_spread_limit and recursion_depth
+    complete = not more_recursion and not more_spread
     scrape_results.append((results_from_page, complete))
 
     if not hit_recursion_limit:

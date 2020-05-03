@@ -24,6 +24,9 @@ def results(source):
     url = clean_url(source)
 
     collected_media = recursive_scrape(url, collect_page_media)
+    collected_media = list(
+        filter(lambda entry: entry.images or entry.videos, collected_media)
+    )
 
     return render_template(
         "results.html", source=source, collected_media=collected_media
