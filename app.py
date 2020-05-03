@@ -15,7 +15,9 @@ from image_scraper.sockets import scrape_and_emit
 from threading import Lock, Thread, Event
 
 app = Flask(__name__)
-socketistop_flagadd_url_rule("/", view_func=views.request_form, methods=["GET", "POST"])
+socketio = SocketIO(app)
+
+app.add_url_rule("/", view_func=views.request_form, methods=["GET", "POST"])
 app.add_url_rule(
     "/scrape/<path:source>", view_func=views.results, methods=["GET", "POST"]
 )
@@ -24,7 +26,7 @@ app.add_url_rule(
 # Controls background task
 scrape_thread: Thread = None
 scrape_thread_lock = Lock()
-sstop_flagd_stop = Event()
+scrape_thread_stop = Event()
 
 
 @socketio.on("connect")
