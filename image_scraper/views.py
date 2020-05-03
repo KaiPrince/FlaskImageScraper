@@ -9,7 +9,7 @@
 
 from flask import redirect, render_template, request, url_for
 from image_scraper.app_service import collect_page_media, recursive_scrape
-from utils.scraper import clean_url, get_images, get_links, get_videos
+from utils.scraper import clean_url, scrape_images, scrape_links, scrape_videos
 
 
 def request_form():

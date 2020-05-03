@@ -16,7 +16,7 @@ search_form %} {% block title %}Results{% endblock %} {% block content %}
   </div>
 </div>
 
-{% for page in collected_media %} {% if not loop.first %}
+{% for page, complete in collected_media %} {% if not loop.first %}
 <h2 class="lead mt-4">
   <a href="/scrape/{{page.page_url}}" class="text-reset">{{page.page_title}}</a>
 </h2>
@@ -43,4 +43,8 @@ search_form %} {% block title %}Results{% endblock %} {% block content %}
   </div>
   {% endfor %}
 </div>
-{% endfor %} {% endblock %}
+{% if not complete %}
+<small class="text-muted">
+  <a href="/scrape/{{page.page_url}}" class="text-reset">Show more...</a>
+</small>
+{% endif %} {% endfor %} {% endblock %}

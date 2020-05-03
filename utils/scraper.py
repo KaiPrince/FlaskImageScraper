@@ -15,20 +15,15 @@ import mimetypes
 import re
 
 
-def get_videos(url) -> list:
+def scrape_videos(html) -> list:
     """ Returns full links to all videos on a page. """
     video_links = []
-
-    page = get_page(url)
-    if not page:
-        return video_links
-    html = BeautifulSoup(page, "html.parser")
 
     image_tags = html.find_all(["video", "source"])
     for tag in image_tags:
         if "src" not in tag.attrs:
             continue
-        link = urljoin(url, tag["src"])
+        link = tag["src"]
         if is_url_video(link):
             video_links.append(link)
 
@@ -39,7 +34,7 @@ def get_videos(url) -> list:
 
         href = tag["href"]
         if is_url_video(href):
-            video_links.append(urljoin(url, href))
+            video_links.append(href)
 
     return video_links
 
@@ -49,14 +44,9 @@ def is_url_video(url):
     return mimetype and mimetype.startswith("video")
 
 
-def get_links(url) -> set:
+def scrape_links(html) -> set:
     """ Returns a list of all the links on a page. """
     links = set()
-
-    page = get_page(url)
-    if not page:
-        return links
-    html = BeautifulSoup(page, "html.parser")
 
     anchor_tags = html.find_all("a")
     for tag in anchor_tags:
@@ -64,26 +54,21 @@ def get_links(url) -> set:
             continue
         if not tag["href"].endswith("/"):
             continue
-        link = urljoin(url, tag["href"])
+        link = tag["href"]
         links.add(link)
 
     return links
 
 
-def get_images(url) -> list:
+def scrape_images(html) -> list:
     """ Returns full links to all images on a page. """
     image_links = []
-
-    page = get_page(url)
-    if not page:
-        return image_links
-    html = BeautifulSoup(page, "html.parser")
 
     image_tags = html.find_all("img")
     for tag in image_tags:
         if "src" not in tag.attrs:
             continue
-        link = urljoin(url, tag["src"])
+        link = tag["src"]
         image_links.append(link)
 
     link_tags = html.find_all("a")
@@ -93,7 +78,7 @@ def get_images(url) -> list:
 
         href = tag["href"]
         if is_url_image(href):
-            image_links.append(urljoin(url, href))
+            image_links.append(href)
 
     return image_links
 

@@ -6,16 +6,37 @@
 * Description: This file contains service functions for the image_scraper app.
 """
 
+import mimetypes
+import re
+from contextlib import closing
 from itertools import islice
-
-from .constants import recursion_depth_limit, recursion_spread_limit
-from utils.scraper import clean_url, get_images, get_links, get_videos
 from urllib.parse import urljoin, urlparse
 
+from bs4 import BeautifulSoup
+from requests import get, post
+from requests.exceptions import RequestException
 
-def collect_page_media(src):
-    images = get_images(src)
-    videos = get_videos(src)
+from utils.scraper import (
+    clean_url,
+    scrape_images,
+    scrape_links,
+    scrape_videos,
+    get_page,
+)
+
+from .constants import recursion_depth_limit, recursion_spread_limit
+
+
+def collect_page_media(html, src):
+
+    if not html:
+        return None
+
+    images = scrape_images(html)
+    images = list(map(lambda image: urljoin(src, image), images))
+
+    videos = scrape_videos(html)
+    videos = list(map(lambda video: urljoin(src, video), videos))
 
     if images or videos:
         page_url = src
@@ -30,23 +51,43 @@ def collect_page_media(src):
         return None
 
 
-def recursive_scrape(url: str, scrape_func: callable, recursion_depth: int = 0):
+def recursive_scrape(
+    url: str, scrape_func: callable, recursion_depth: int = 0
+) -> (list, bool):
     """ Recursive functions that consumes a URL string, 
-        and produces a set of image URLs. 
+        and produces a list of image URLs. 
     """
     print("Scraping " + url + "...")
     scrape_results = []
-    results_from_page = scrape_func(url)
-    scrape_results.append(results_from_page)
 
-    if recursion_depth >= recursion_depth_limit:
+    page = get_page(url)
+    if not page:
         return scrape_results
+    html = BeautifulSoup(page, "html.parser")
 
-    links = get_links(url)
-    upstream_links = {link for link in links if link in url}
-    links.difference_update(upstream_links)
-    for link in islice(links, recursion_spread_limit):
-        descendant_images = recursive_scrape(link, scrape_func, recursion_depth + 1)
-        scrape_results.extend(descendant_images)
+    results_from_page = scrape_func(html, url)
+
+    links = get_downstream_links(html, url)
+
+    complete = not links and len(links) <= recursion_spread_limit
+    scrape_results.append((results_from_page, complete))
+
+    if recursion_depth < recursion_depth_limit:
+
+        links_to_scrape = islice(links, recursion_spread_limit)
+        for link in links_to_scrape:
+            descendant_results = recursive_scrape(
+                link, scrape_func, recursion_depth + 1
+            )
+            scrape_results.extend(descendant_results)
 
     return scrape_results
+
+
+def get_downstream_links(html, url: str) -> set:
+    links = scrape_links(html)
+    links = set(map(lambda link: urljoin(url, link), links))
+
+    upstream_links = {link for link in links if link in url}
+    links.difference_update(upstream_links)
+    return links
