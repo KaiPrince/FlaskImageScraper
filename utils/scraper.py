@@ -1,9 +1,9 @@
 """
 * Project Name: FlaskImageScraper
-* File Name: service.py
+* File Name: scraper.py
 * Programmer: Kai Prince
 * Date: Sat, May 02, 2020
-* Description: This file contains service functions.
+* Description: This file contains scraper service functions.
 """
 
 from requests import get, post

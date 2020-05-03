@@ -8,8 +8,8 @@
 
 from itertools import islice
 
-from constants import recursion_depth_limit, recursion_spread_limit
-from service import clean_url, get_images, get_links, get_videos
+from .constants import recursion_depth_limit, recursion_spread_limit
+from utils.scraper import clean_url, get_images, get_links, get_videos
 from urllib.parse import urljoin, urlparse
 
 

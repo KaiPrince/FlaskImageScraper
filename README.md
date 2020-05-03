@@ -5,4 +5,5 @@ flask run
 
 Todo:
 
+- Fetch in background
 - Paginate output
