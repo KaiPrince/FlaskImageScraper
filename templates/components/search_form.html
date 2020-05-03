@@ -1,0 +1,17 @@
+<!--
+* Project Name: FlaskImageScraper
+* File Name: search_form.html
+* Programmer: Kai Prince
+* Date: Sun, May 03, 2020
+* Description: This file contains a reusable component for the search bar form.
+-->
+
+{% macro search_form(button_text="View Images") -%}
+<form method="POST" action="/">
+  <div class="form-group">
+    <label for="url">URL to scrape:</label>
+    <input id="url" name="url" class="form-control" autofocus />
+  </div>
+  <button type="submit" class="btn btn-primary">{{button_text}}</button>
+</form>
+{%- endmacro %}

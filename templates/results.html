@@ -6,11 +6,20 @@
 * Description: This file contains the results page.
 -->
 
-{% extends "base.html" %} {% block title %}Results{% endblock %} {% block
-content %}
+{% extends "base.html" %} {% from "components/search_form.html" import
+search_form %} {% block title %}Results{% endblock %} {% block content %}
 <h1 class="h4 text-truncate">{{source}}</h1>
+
+<div class="row align-items-center">
+  <div class="col-md-4">
+    {{ search_form(button_text="Scrape again") }}
+  </div>
+</div>
+
 {% for page in collected_media %} {% if not loop.first %}
-<h2 class="lead text-truncate">{{page.page_title}}</h2>
+<h2 class="lead text-truncate">
+  <a href="{{page.page_title}}" class="text-reset">{{page.page_title}}</a>
+</h2>
 {% endif %}
 <div class="row">
   {% for image in page.images %}

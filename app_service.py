@@ -18,8 +18,14 @@ def collect_page_media(src):
     videos = get_videos(src)
 
     if images or videos:
+        page_url = src
         page_title = urlparse(src).path
-        return {"page_title": page_title, "images": images, "videos": videos}
+        return {
+            "page_url": page_url,
+            "page_title": page_title,
+            "images": images,
+            "videos": videos,
+        }
     else:
         return None
 
