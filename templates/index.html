@@ -6,15 +6,11 @@
 * Description: This file contains the main page.
 -->
 
-<html>
-  <head>
-    <title>Flask Image Scraper</title>
-  </head>
-  <body>
-    <form method="POST">
-      <label>URL to scrape:</label>
-      <input name="url" />
-      <button type="submit">View Images</button>
-    </form>
-  </body>
-</html>
+{% extends "base.html" %} {% block title %}Index{% endblock %} 
+{% block content %}
+<form method="POST">
+  <label>URL to scrape:</label>
+  <input name="url" />
+  <button type="submit">View Images</button>
+</form>
+{% endblock %}
