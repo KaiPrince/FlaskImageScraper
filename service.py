@@ -70,7 +70,7 @@ def get_links(url):
     return links
 
 
-def get_images(url):
+def get_images(url) -> set:
     """ Returns full links to all images on a page. """
     image_links = set()
 

@@ -8,20 +8,21 @@
 
 {% extends "base.html" %} {% block title %}Results{% endblock %} {% block
 content %}
-<p>{{source}}</p>
+<h1 class="h4 text-truncate">{{source}}</h1>
+{% for page in collected_media %} {% if not loop.first %}
+<h2 class="lead text-truncate">{{page.page_title}}</h2>
+{% endif %}
 <div class="row">
-  {% for image in images %}
+  {% for image in page.images %}
   <div class="col-3">
-    <a href="{{image}}">
-      <img src="{{image}}" class="img-fluid img-thumbnail rounded"
-    /></a>
+    <a href="{{image}}"> <img src="{{image}}" class="img-thumbnail" /></a>
   </div>
-  {% endfor %} {% for video in videos %}
+  {% endfor %} {% for video in page.videos %}
   <div class="col-4">
     <a href="{{video}}">
       <video
         src="{{video}}"
-        class="img-fluid img-thumbnail rounded"
+        class="img-thumbnail"
         autoplay
         muted
         controls
@@ -30,6 +31,6 @@ content %}
       ></video>
     </a>
   </div>
-  {% endfor %}
+  {% endfor %} {% endfor %}
 </div>
 {% endblock %}
