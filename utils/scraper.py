@@ -84,7 +84,7 @@ def get_images(url) -> set:
         if "src" not in tag.attrs:
             continue
         link = urljoin(url, tag["src"])
-        image_links.add(link)
+        image_links.append(link)
 
     link_tags = html.find_all("a")
     for tag in link_tags:
