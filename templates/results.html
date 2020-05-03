@@ -8,18 +8,19 @@
 
 {% extends "base.html" %} {% from "components/search_form.html" import
 search_form %} {% block title %}Results{% endblock %} {% block content %}
-<h1 class="h4 text-truncate">{{source}}</h1>
+<h1 class="h4"><a href="{{source}}" class="text-reset">{{source}}</a></h1>
 
-<div class="row align-items-center">
+<div class="row align-items-center my-4">
   <div class="col-md-4">
     {{ search_form(button_text="Scrape again") }}
   </div>
 </div>
 
 {% for page in collected_media %} {% if not loop.first %}
-<h2 class="lead text-truncate">
-  <a href="{{page.page_title}}" class="text-reset">{{page.page_title}}</a>
+<h2 class="lead mt-4">
+  <a href="/scrape/{{page.page_url}}" class="text-reset">{{page.page_title}}</a>
 </h2>
+<hr class="mt-0" />
 {% endif %}
 <div class="row">
   {% for image in page.images %}
@@ -40,6 +41,6 @@ search_form %} {% block title %}Results{% endblock %} {% block content %}
       ></video>
     </a>
   </div>
-  {% endfor %} {% endfor %}
+  {% endfor %}
 </div>
-{% endblock %}
+{% endfor %} {% endblock %}

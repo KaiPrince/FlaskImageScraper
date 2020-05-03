@@ -17,7 +17,7 @@ import re
 
 def get_videos(url):
     """ Returns full links to all videos on a page. """
-    video_links = set()
+    video_links = []
 
     page = get_page(url)
     if not page:
@@ -30,7 +30,7 @@ def get_videos(url):
             continue
         link = urljoin(url, tag["src"])
         if is_url_video(link):
-            video_links.add(link)
+            video_links.append(link)
 
     link_tags = html.find_all("a")
     for tag in link_tags:
@@ -39,7 +39,7 @@ def get_videos(url):
 
         href = tag["href"]
         if is_url_video(href):
-            video_links.add(urljoin(url, href))
+            video_links.append(urljoin(url, href))
 
     return video_links
 
@@ -72,7 +72,7 @@ def get_links(url):
 
 def get_images(url) -> set:
     """ Returns full links to all images on a page. """
-    image_links = set()
+    image_links = []
 
     page = get_page(url)
     if not page:
@@ -93,7 +93,7 @@ def get_images(url) -> set:
 
         href = tag["href"]
         if is_url_image(href):
-            image_links.add(urljoin(url, href))
+            image_links.append(urljoin(url, href))
 
     return image_links
 
