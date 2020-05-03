@@ -24,7 +24,7 @@ from utils.scraper import (
     get_page,
 )
 
-from .constants import recursion_depth_limit, recursion_spread_limit
+from . import constants
 
 
 def collect_page_media(html, src):
@@ -69,12 +69,21 @@ def recursive_scrape(
 
     links = get_downstream_links(html, url)
 
-    complete = not links and len(links) <= recursion_spread_limit
+    hit_recursion_limit = recursion_depth >= constants.recursion_depth_limit
+
+    done_recursion = hit_recursion_limit and not links
+    done_spread = len(links) <= constants.recursion_spread_limit or not recursion_depth
+    complete = (not hit_recursion_limit or done_recursion) and done_spread
     scrape_results.append((results_from_page, complete))
 
-    if recursion_depth < recursion_depth_limit:
+    if not hit_recursion_limit:
 
-        links_to_scrape = islice(links, recursion_spread_limit)
+        spread_limit = (
+            constants.recursion_spread_limit
+            if recursion_depth
+            else constants.recursion_spread_limit * 2
+        )
+        links_to_scrape = islice(links, spread_limit)
         for link in links_to_scrape:
             descendant_results = recursive_scrape(
                 link, scrape_func, recursion_depth + 1

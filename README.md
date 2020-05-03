@@ -7,6 +7,5 @@ Todo:
 
 - Fetch in background
 - Paginate output
-- Add "Show more" link, or paginate by page.
-- Performance boost by using a single fetch for all scraping.
 - Standardize url vs src
+- Fix results being different each time
