@@ -8,3 +8,5 @@ Todo:
 - Scrape only on button action.
 - Standardize url vs src
 - Fix results being different each time
+- Add cool github readme.
+- Add breadcrumb trail for backwards navigation
