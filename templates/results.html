@@ -12,7 +12,7 @@ super() }}
 <script>
   // Lazy loading script.
   // Credit: https://css-tricks.com/the-complete-guide-to-lazy-loading-images/
-  document.addEventListener("DOMContentLoaded", function () {
+  function initLazyLoading() {
     var lazyloadImages;
 
     if ("IntersectionObserver" in window) {
@@ -63,6 +63,27 @@ super() }}
       window.addEventListener("resize", lazyload);
       window.addEventListener("orientationChange", lazyload);
     }
+  }
+  document.addEventListener("DOMContentLoaded", initLazyLoading);
+
+  function htmlToElements(html) {
+    var template = document.createElement("template");
+    template.innerHTML = html;
+    return template.content.childNodes;
+  }
+
+  // Script to connect to web socket
+  $(document).ready(function () {
+    let socket = io.connect();
+
+    socket.on("connect", function () {
+      socket.emit("start_scrape", "{{source}}");
+    });
+
+    socket.on("page", function ({ data }) {
+      document.body.append(...htmlToElements(data));
+      initLazyLoading();
+    });
   });
 </script>
 {% endblock %} {% block content %}

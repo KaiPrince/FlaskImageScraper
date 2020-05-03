@@ -1,0 +1,27 @@
+<h2 class="lead mt-4">
+  <a href="/scrape/{{page.page_url}}" class="text-reset">{{page.page_title}}</a>
+</h2>
+<hr class="mt-0" />
+<div class="row">
+  {% for image in page.images %}
+  <div class="col-3">
+    <a href="{{image}}">
+      <img data-src="{{image}}" class="img-thumbnail lazy"
+    /></a>
+  </div>
+  {% endfor %} {% for video in page.videos %}
+  <div class="col-4">
+    <a href="{{video}}">
+      <video
+        data-src="{{video}}"
+        class="img-thumbnail lazy"
+        autoplay
+        muted
+        controls
+        playsinline
+        loop
+      ></video>
+    </a>
+  </div>
+  {% endfor %}
+</div>
