@@ -10,7 +10,7 @@ from requests import get, post
 from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urlparse
 import mimetypes
 import re
 
@@ -55,9 +55,20 @@ def scrape_links(html) -> set:
         if not tag["href"].endswith("/"):
             continue
         link = tag["href"]
+        link = url_strip_after_path(link)
         links.add(link)
 
     return links
+
+
+def url_strip_after_path(url: str) -> str:
+    """ Strips away the params, query, and fragments. """
+    parsed = urlparse(url)
+    url = ""
+    for part in parsed[:3]:
+        url += part
+
+    return url
 
 
 def scrape_images(html) -> list:
