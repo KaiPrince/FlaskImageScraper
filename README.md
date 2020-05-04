@@ -11,3 +11,4 @@ Todo:
 - Add cool github readme.
 - Add breadcrumb trail for backwards navigation
   - Or "go up" button
+- Fix threading to be session-specific
