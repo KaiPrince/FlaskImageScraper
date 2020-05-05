@@ -7,7 +7,7 @@
 """
 
 import gunicorn
-from flask import Flask
+from flask import Flask, request
 from image_scraper import views
 from flask_socketio import SocketIO, emit
 from image_scraper.sockets import scrape_and_emit
@@ -24,15 +24,13 @@ app.add_url_rule(
 
 
 # Controls background task
-scrape_thread: Thread = None
-scrape_thread_lock = Lock()
-scrape_thread_stop = Event()
+scrape_tasks = {}
 
 
 @socketio.on("connect")
 def socket_connected():
-    print("connected!")
-    scrape_thread_stop.clear()
+    print("connected!", request.sid)
+    scrape_tasks[request.sid] = {"thread": None, "lock": Lock(), "stop": Event()}
 
 
 @socketio.on("start_scrape")
@@ -40,19 +38,22 @@ def start_scrape(url):
     if not url:
         return
 
-    global scrape_thread
-    with scrape_thread_lock:
+    this_task = scrape_tasks[request.sid]
+    with this_task["lock"]:
         print("starting thread")
-        scrape_thread = socketio.start_background_task(
-            scrape_and_emit(url, scrape_thread_stop)
+        this_task["thread"] = socketio.start_background_task(
+            scrape_and_emit(url, this_task["stop"])
         )
 
 
 @socketio.on("disconnect")
 def stop_scrape():
-    print("disconnected")
-    scrape_thread_stop.set()
-    scrape_thread.join()
+    print("disconnected", request.sid)
+    this_task = scrape_tasks[request.sid]
+
+    this_task["stop"].set()
+    with this_task["lock"]:
+        this_task["thread"].join()
 
 
 if __name__ == "__main__":

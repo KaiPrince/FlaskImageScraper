@@ -55,7 +55,7 @@ def recursive_scrape(
 
     page = get_page(url)
     if not page:
-        yield
+        return
     html = BeautifulSoup(page, "html.parser")
 
     results_from_page = scrape_func(html, url)
