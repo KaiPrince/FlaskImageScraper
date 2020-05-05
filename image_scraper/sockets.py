@@ -10,20 +10,20 @@ from flask import render_template
 from flask_socketio import emit
 from image_scraper.app_service import collect_page_media
 from image_scraper.app_service import recursive_scrape
-
 from threading import Event
 
 
-def scrape_and_emit(src: str, stop_flag: Event = None):
+def scrape_and_emit(src: str, stop_flag: Event, app_context, room_id):
+    with app_context:
+        for page, complete in recursive_scrape(src, collect_page_media):
+            response = render_template(
+                "components/media_page.html", page=page, complete=complete
+            )
 
-    for page, complete in recursive_scrape(src, collect_page_media):
-        response = render_template(
-            "components/media_page.html", page=page, complete=complete
-        )
-        emit("page", {"data": response})
+            emit("page", {"data": response}, namespace="/", room=room_id)
 
-        if stop_flag and stop_flag.isSet():
-            print("stopping")
-            return
+            if stop_flag and stop_flag.isSet():
+                print("stopping")
+                return
 
-    emit("scrape-complete")
+        emit("scrape-complete", namespace="/", room=room_id)

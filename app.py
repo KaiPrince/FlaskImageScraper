@@ -42,7 +42,7 @@ def start_scrape(url):
     with this_task["lock"]:
         print("starting thread")
         this_task["thread"] = socketio.start_background_task(
-            scrape_and_emit(url, this_task["stop"])
+            scrape_and_emit, url, this_task["stop"], app.app_context(), request.sid
         )
 
 
