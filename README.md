@@ -12,3 +12,4 @@ Todo:
 - Add breadcrumb trail for backwards navigation
   - Or "go up" button
 - Fix threading to be session-specific
+- Add form settings for search spread and depth
