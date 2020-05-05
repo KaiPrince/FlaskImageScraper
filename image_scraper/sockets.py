@@ -13,17 +13,17 @@ from image_scraper.app_service import recursive_scrape
 from threading import Event
 
 
-def scrape_and_emit(src: str, stop_flag: Event, app_context, room_id):
+def scrape_and_emit(src: str, stop_flag: Event, app_context, emit_kwargs):
     with app_context:
         for page, complete in recursive_scrape(src, collect_page_media):
-            response = render_template(
-                "components/media_page.html", page=page, complete=complete
-            )
-
-            emit("page", {"data": response}, namespace="/", room=room_id)
-
             if stop_flag and stop_flag.isSet():
                 print("stopping")
                 break
 
-        emit("scrape-complete", namespace="/", room=room_id)
+            response = render_template(
+                "components/media_page.html", page=page, complete=complete
+            )
+
+            emit("page", {"data": response}, **emit_kwargs)
+
+        emit("scrape-complete", **emit_kwargs)
