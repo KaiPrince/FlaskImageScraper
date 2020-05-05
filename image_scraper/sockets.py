@@ -24,6 +24,6 @@ def scrape_and_emit(src: str, stop_flag: Event, app_context, room_id):
 
             if stop_flag and stop_flag.isSet():
                 print("stopping")
-                return
+                break
 
         emit("scrape-complete", namespace="/", room=room_id)
