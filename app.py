@@ -53,7 +53,8 @@ def stop_scrape():
 
     this_task["stop"].set()
     with this_task["lock"]:
-        this_task["thread"].join()
+        if this_task["thread"]:
+            this_task["thread"].join()
 
 
 if __name__ == "__main__":
